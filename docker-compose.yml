@@ -7,6 +7,7 @@ services:
       dockerfile: ./${TYPE}/Dockerfile
       args:
         INFLUXDB_TAG: ${INFLUXDB_TAG}
+        # INFLUXDB_TAG: 1.7-alpine
     image: "influxdb"
     volumes:
       # Mount for influxdb data directory
@@ -19,6 +20,8 @@ services:
       - "8082:8082"
       # UDP Port
       - "8089:8089/udp"
+      # Collectd port
+      - "25826:25826/udp"
 
   telegraf:
     # Full tag list: https://hub.docker.com/r/library/telegraf/tags/
@@ -40,6 +43,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - influxdb
+    ports:
+      # Syslog
+      - "6514:6514"
 
   kapacitor:
   # Full tag list: https://hub.docker.com/r/library/kapacitor/tags/
