@@ -1,0 +1,25 @@
+
+# docker-compose.override.yml for TICK stack sandbox on a Pi w/ collectd
+# Author: @westurner
+
+version: '3'
+services:
+
+  influxdb:
+    # Note that 'deploy' and subkeys requires `docker-compose --compatibility`
+    volumes:
+      - ./collectd/types.db:/usr/share/collectd/types.db
+    deploy:
+      resources:
+        limits:
+          # Raspberry Pi 3b+ only has 1GB of RAM
+          memory: 512M
+
+  kapacitor:
+    restart: "no"
+    entrypoint: ["/bin/true"]
+
+  documentation:
+    restart: "no"
+    entrypoint: ["/bin/true"]
+
